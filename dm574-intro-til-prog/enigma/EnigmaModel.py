@@ -4,36 +4,13 @@
 
 from EnigmaView import EnigmaView
 from EnigmaConstants import ALPHABET, ROTOR_PERMUTATIONS
-
-class EnigmaRotor:
-    key = "A"
-    alphabet = ""
-
-    def __init__(self, alphabet):
-        self.alphabet = alphabet
-        self.key = alphabet[0]
-
-    def advance(self):
-        next_idx = self.alphabet.index(self.key) + 1
-        if next_idx == len(self.alphabet):
-            self.key = self.alphabet[0]
-        else:
-            self.key = self.alphabet[next_idx]
-
-    def get_offset(self):
-        return self.alphabet.index(self.key)
-
-    def get_permutation(self):
-        return self.key
-
-
-
+from EnigmaRotor import EnigmaRotor, apply_permutation
 
 class EnigmaModel:
     pressed_keys = set()
-    rotors = [EnigmaRotor(ALPHABET),
-              EnigmaRotor(ALPHABET),
-              EnigmaRotor(ALPHABET)]
+    rotors = [EnigmaRotor(ALPHABET, ROTOR_PERMUTATIONS[2]),
+              EnigmaRotor(ALPHABET, ROTOR_PERMUTATIONS[1]),
+              EnigmaRotor(ALPHABET, ROTOR_PERMUTATIONS[0])]
 
     def __init__(self):
         """Creates a new EnigmaModel with no views."""
@@ -52,12 +29,25 @@ class EnigmaModel:
         return letter in self.pressed_keys
         return False        # In the stub version, keys are never down
 
-    def is_lamp_on(self, letter):
-        return letter in self.pressed_keys
-        return False        # In the stub version, lamps are always off
+    def is_lamp_on(self, lamp_letter):
+        if not self.pressed_keys:
+            return False
+
+        # The Enigma only allows one pressed key at a time for this assignment
+        pressed = next(iter(self.pressed_keys))
+
+        index = ALPHABET.index(pressed)
+        new_index = apply_permutation(index,
+                                  self.rotors[0].shifted_alphabet,
+                                  self.rotors[0].get_offset())
+        output_letter = ALPHABET[new_index]
+
+        return lamp_letter == output_letter
 
     def key_pressed(self, letter):
         # You need to fill in this code
+
+
         self.pressed_keys.add(letter)
         self.update()
 
