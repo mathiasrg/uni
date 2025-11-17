@@ -8,9 +8,9 @@ from EnigmaRotor import EnigmaRotor, apply_permutation
 
 class EnigmaModel:
     pressed_keys = set()
-    rotors = [EnigmaRotor(ALPHABET, ROTOR_PERMUTATIONS[2]),
-              EnigmaRotor(ALPHABET, ROTOR_PERMUTATIONS[1]),
-              EnigmaRotor(ALPHABET, ROTOR_PERMUTATIONS[0])]
+    rotors = [EnigmaRotor(ALPHABET, ROTOR_PERMUTATIONS[2]), #Fast
+              EnigmaRotor(ALPHABET, ROTOR_PERMUTATIONS[1]), #Medium
+              EnigmaRotor(ALPHABET, ROTOR_PERMUTATIONS[0])] #Slow
 
     def __init__(self):
         """Creates a new EnigmaModel with no views."""
@@ -27,7 +27,6 @@ class EnigmaModel:
 
     def is_key_down(self, letter):
         return letter in self.pressed_keys
-        return False        # In the stub version, keys are never down
 
     def is_lamp_on(self, lamp_letter):
         if not self.pressed_keys:
