@@ -1,32 +1,34 @@
 from EnigmaConstants import ALPHABET
 
-def apply_permutation(index, permutation, offset):
-    shifted = (index + offset) % len(ALPHABET)
-    letter = permutation[shifted]
-    output_index = (ord(letter) - ord('A') - offset) % len(ALPHABET)
-    return output_index
-
 class EnigmaRotor:
-    key = "A"
-    alphabet = ""
-    shifted_alphabet = ""
-
-    def __init__(self, alphabet, shifted_alphabet):
-        self.alphabet = alphabet
-        self.shifted_alphabet = shifted_alphabet
-        self.key = alphabet[0]
-
-    def advance(self):
-        next_idx = self.alphabet.index(self.key) + 1
-        if next_idx == len(self.alphabet):
-            self.key = self.alphabet[0]
-        else:
-            self.key = self.alphabet[next_idx]
+    def __init__(self, permutation):
+        self._permutation = permutation
+        self._inverse_permutation = self._invert_key(permutation)
+        self._offset = 0
 
     def get_offset(self):
-        return self.alphabet.index(self.key)
+        return self._offset
 
     def get_permutation(self):
-        return self.key
+        return self._permutation
 
+    def get_inverse_permutation(self):
+        return self._inverse_permutation
 
+    def advance(self):
+        self._offset = (self._offset + 1) % 26
+        return self._offset == 0
+
+    def _invert_key(self, key):
+        inverted = [""] * 26
+        for i in range(26):
+            encrypted_letter = key[i]
+            encrypted_index = ALPHABET.index(encrypted_letter)
+            inverted[encrypted_index] = ALPHABET[i]
+        return "".join(inverted)
+
+def apply_permutation(index, permutation, offset):
+    shifted_index = (index + offset) % 26
+    encrypted_char = permutation[shifted_index]
+    encrypted_index = ALPHABET.index(encrypted_char)
+    return (encrypted_index - offset) % 26
