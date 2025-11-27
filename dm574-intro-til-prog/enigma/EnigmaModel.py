@@ -13,10 +13,11 @@ class EnigmaModel:
         self._views = [ ]
         self._pressed_keys = {letter: False for letter in ALPHABET}
         self._lit_lamps = {letter: False for letter in ALPHABET}
+
         self._rotors = [
-            EnigmaRotor(ROTOR_PERMUTATIONS[0]),
-            EnigmaRotor(ROTOR_PERMUTATIONS[1]),
-            EnigmaRotor(ROTOR_PERMUTATIONS[2])
+            EnigmaRotor(ROTOR_PERMUTATIONS[0]), #Slow
+            EnigmaRotor(ROTOR_PERMUTATIONS[1]), #Medium
+            EnigmaRotor(ROTOR_PERMUTATIONS[2])  #Fast
         ]
 
     def add_view(self, view):
@@ -47,6 +48,7 @@ class EnigmaModel:
     def key_released(self, letter):
         self._pressed_keys[letter] = False
 
+        #We can't really know what light to turn off, so we just turn the all off.
         for lamp_letter in ALPHABET:
             self._lit_lamps[lamp_letter] = False
 

@@ -15,6 +15,8 @@ class EnigmaRotor:
     def get_inverse_permutation(self):
         return self._inverse_permutation
 
+    #Returns whether it looped back from Z to A
+    #Used by the next rotor, to tell if it should also advance
     def advance(self):
         self._offset = (self._offset + 1) % 26
         return self._offset == 0
